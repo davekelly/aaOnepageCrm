@@ -137,7 +137,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             Form Width?
                                             <br/>
                                             <small>
-                                                Set a pixel width for the form. Leave empty for 100% width. Optimal is ~280px
+                                                Set a pixel width for the form. Leave empty for 100% width. Optimal is ~260px
                                             </small>
                                         </th>          
                                         <td>

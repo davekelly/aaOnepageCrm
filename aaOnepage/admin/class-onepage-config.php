@@ -88,8 +88,13 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                 </tr>                               
                                 
                                 <?php
-                                    $account_details = get_transient( 'aa_onepage_account_details' );
-                                    if( $account_details ):                                 
+                                    if( null === $onePageApi){
+                                        $onePageApi = new AAOnepage_Api();
+                                    }
+                                    $account_details = $onePageApi->getOnePageAccount();
+                                    
+                                    
+                                    if( !is_wp_error( $account_details )):                                 
                                         // delete_transient( 'aa_onepage_account_details');
                                 ?>
                                     <tr valign="top">
@@ -212,8 +217,24 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             <hr />
                                         </td>
                                     </tr>
-                                <?php else: ?>
-                                     <tr valign="top">
+                                <?php else: ?>                                    
+                                     <?php if( is_wp_error( $account_details )): ?>
+                                         <tr valign="top">
+                                            <th scope="row" colspan="2">
+                                                <div class="error">
+                                                    <?php if( strtolower( $account_details->get_error_message()) === 'invalid request data'): ?>
+                                                            <p>
+                                                                Incorrect Username or Password.
+                                                            </p>
+                                                    <?php else: ?>
+                                                        <?php echo $account_details->get_error_message(); ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </th>                                    
+                                        </tr>
+                                    <?php endif; ?>
+
+                                    <tr valign="top">
                                         <th scope="row">
                                             Onepage Username
                                         </th>

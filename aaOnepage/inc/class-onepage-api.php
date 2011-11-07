@@ -14,31 +14,45 @@ class AAOnepage_Api{
     
     public function __construct() {
         
-        if(null === $this->uid || null === $this->apiKey){
-            
-            // Have we account details already?
-            $account_details = get_transient( 'aa_onepage_account_details' );
-           // $account_details = false;
-            
-            
-            // We've never signed in, or the transient needs refreshing
-            if(! $account_details ){
-                $un = get_option( 'aa_onepage_username' );            
-                $pw = get_option( 'aa_onepage_pwd' );            
-
-                if( !empty($un) && !empty( $pw ) ){
-                    $this->setUsername( $un );
-                    $this->setPassword( $pw );
-                    $this->login();                    
-                }
-            }else{
-                // have a transient account details obj => grab the uid  & key              
-                $this->setUid( $account_details->data->uid );
-                $this->setApiKey( $account_details->data->key );
-            }
+        if(null === $this->uid || null === $this->apiKey){            
+           $this->getOnePageAccount();            
         }
     }
     
+    
+    
+    public function getOnePageAccount(){
+         // Have we account details already?
+        $account_details = get_transient( 'aa_onepage_account_details' );           
+
+        // We've never signed in, or the transient needs refreshing
+        if(! $account_details ){
+            $un = get_option( 'aa_onepage_username' );            
+            $pw = get_option( 'aa_onepage_pwd' );            
+
+            if( !empty($un) && !empty( $pw ) ){
+                $this->setUsername( $un );
+                $this->setPassword( $pw );
+                $onePageLogin = $this->login();                 
+
+                // 
+                if( is_wp_error( $onePageLogin )){
+                    // if ( current_user_can('manage_options') ){                    
+                        return $onePageLogin;
+                    // }
+                    // return 'Aplogies, there has been an error.';                        
+                }                    
+            }else{
+                return new WP_Error('broke', __( 'Plese sign in to OnePageCRM' ));
+            }
+        }else{
+            // have a transient account details obj => grab the uid  & key              
+            $this->setUid( $account_details->data->uid );
+            $this->setApiKey( $account_details->data->key );
+            
+            return $account_details; 
+        }
+    }
     
     /**
      * Generic HTTP interaction handler. Also manages building auth calls 
@@ -165,13 +179,13 @@ class AAOnepage_Api{
         $loginData = $this->doApiCall( $loginUrl, $args, 'GET', false);
 
         // Use the returned data
-        if($loginData){
+        if($loginData->message === 'OK'){
             set_transient( 'aa_onepage_account_details', $loginData);
             $this->setUid( $loginData->data->uid );
             $this->setApiKey( $loginData->data->key);
             $this->setPassword( null );
         }else{
-            throw 'Invalid Login';
+           return new WP_Error('broke', __( $loginData->message ));
         }        
         
     }

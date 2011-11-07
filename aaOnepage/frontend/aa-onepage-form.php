@@ -29,8 +29,7 @@ function aa_onepage_contact_form() {
             // nonce is ok, go ahead
             if(null === $onePageApiContact){               
                 $onePageApiContact = new AAOnepage_Api_Contact();
-            }               
-            
+            }                           
             $onePageResponse = $onePageApiContact->createContact( $aaContact );            
             
             // Handle response...
@@ -40,12 +39,24 @@ function aa_onepage_contact_form() {
                 $aa_success_message = true;
             }else{
                 // There's been a problem, fall back to email...
-                $onePageApiContact->emailContactDetails($aaContact, $error = $onePageResponse);
+                $mailSent = $onePageApiContact->emailContactDetails($aaContact, $error = $onePageResponse);
+                if( $mailSent ){
+                    // mail sent to admin with contact details & error
+                    $output_form = false;
+                    $aa_success_message = true;
+                }else{
+                    // Mail failed too...give them an error.
+                    $output_form = false;
+                    $aa_show_error_message = true;
+                    $aa_error_message_text = 'Apologies, we are currently having a problem with this contact form.';
+                }
+                
             }
             
         }else{
             $output_form = true;
             $aa_show_error_message = true;
+            $aa_error_message_text = 'An error occurred when sending the form. Please try again.';
         }
 
     } else {        // ! form submit
@@ -55,7 +66,7 @@ function aa_onepage_contact_form() {
        $description = "";
     }
     
-    
+    // Do we display the form?
     if ($output_form) { ?>
         <?php            
             $aa_form_header     = get_option('aa_onepage_form_header'); 
@@ -86,7 +97,7 @@ function aa_onepage_contact_form() {
             <?php wp_nonce_field('add-contact','aaonepage_added'); ?>
             <?php if($aa_show_error_message): ?>
                     <p class="aa-error-message">
-                         An error occurred when sending the form. Please try again.
+                         <?php echo $aa_error_message_text; ?>
                     </p>
             <?php endif; // aa_show_error_message ?>
             <div class="aa-onepage-fieldgroup">
@@ -116,7 +127,7 @@ function aa_onepage_contact_form() {
     // Form Submitted. All is good.
     }elseif( $aa_success_message){ ?>
         <div id="aa-onepage-contactform"
-        <h4>Message Sent</h4>
+        <h3>Message Sent</h3>
         <div class="aa-success-message">
             <?php 
             $aa_success_message_text = get_option('aa_onepage_success_message'); 

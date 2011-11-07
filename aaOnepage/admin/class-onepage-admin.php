@@ -71,8 +71,10 @@ if ( !class_exists('AAOnepage_Plugin_Admin') ) {
              */
             function on_deactivate(){
                 
-                update_option('aa_onepage_username', null);
-                update_option('aa_onepage_pwd', null);                                
+                delete_option('aa_onepage_username');
+                delete_option('aa_onepage_pwd');   
+                
+                delete_transient( 'aa_onepage_account_details');
             }
 
             /**
@@ -84,7 +86,17 @@ if ( !class_exists('AAOnepage_Plugin_Admin') ) {
                 if ( __FILE__ != WP_UNINSTALL_PLUGIN )
                     return;
 
-                new YourPluginNameInit( 'uninstall' );
+                // delete the stored settings
+                delete_option('aa_onepage_username');
+                delete_option('aa_onepage_pwd');   						                                        
+                delete_option('aa_onepage_form_header' );						                                        
+                delete_option('aa_onepage_form_width' );						                                        
+                delete_option('aa_onepage_basic_style' );						                                        
+                delete_option('aa_onepage_contact_tags' );						                                        
+                delete_option('aa_onepage_success_message' );	
+                
+                // lose the transient login.
+                delete_transient( 'aa_onepage_account_details');
             }
 
 

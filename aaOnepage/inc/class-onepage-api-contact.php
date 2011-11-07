@@ -64,7 +64,7 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
             
             return true;
         }
-        return $onePageContact->message;
+        return  new WP_Error('broke', __( $onePageContact->message ));
     }
 
     
@@ -135,7 +135,7 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         if(isset( $error )){
             $message .= "================= ERROR Message ======================== \r\n";
             $message .= "There was an error adding the contact to OnePage. Details below: \r\n\r\n";
-            $message .= get_error_message();            
+            $message .= $error->get_error_message();            
         }
         
         $resp = wp_mail($to, $subject, $message);
@@ -143,8 +143,8 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         if(! is_wp_error( $response ) ){
             return true;
         }else{
-            // at this point, you're pretty much screwed....            
-            // ...the user gets an error message
+            // at this point, you're pretty much screwed...the user gets an error message
+            // telling them the form isn't working
             return false;
         }
         

@@ -1,5 +1,5 @@
 
-Push leads to your onepagecrm.com account
+A Wordpress plugin to push leads to your onepagecrm.com account
 
 == Description ==
 
@@ -12,10 +12,6 @@ Push leads to your onepagecrm account through a contact form on your site
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Visit the plugin settings and sign into your onepage account
 1. use the shortcode [aa_onepage_form] or place `<?php aa_onepage_form(); ?>` in your template
-
-== Frequently Asked Questions ==
-
-== Screenshots ==
 
 
 == Changelog ==

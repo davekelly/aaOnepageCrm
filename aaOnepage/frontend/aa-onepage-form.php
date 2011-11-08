@@ -9,7 +9,9 @@
 
 function aa_onepage_contact_form() {
     
-    if (isset($_POST['aaonepage_submit'])) { 
+    $aaFormShowMessage  = get_option('aa_onepage_form_show_message');
+    
+    if (isset($_POST['aaonepage_submit']) ) { 
         $output_form    = false;
         $aaContact      = array();
         
@@ -17,7 +19,10 @@ function aa_onepage_contact_form() {
         $aaContact['emails']        = $_POST['aaonepage_contact_email'];
         $aaContact['phones']        = $_POST['aaonepage_contact_phone'];
         $aaContact['company']       = $_POST['aaonepage_contact_company'];
-        $aaContact['description']   = $_POST['aaonepage_contact_description'];
+        
+        if( !empty( $aaFormShowMessage )){
+            $aaContact['description']   = $_POST['aaonepage_contact_description'];
+        }
     
         // Break name into first & last
         list($firstname, $lastname) = preg_split('/\s+(?=[^\s]+$)/', $fullname, 2);    
@@ -71,7 +76,7 @@ function aa_onepage_contact_form() {
         <?php            
             $aa_form_header     = get_option('aa_onepage_form_header'); 
             $addBasicStyleClass = get_option('aa_onepage_basic_style');
-            $aaFormWidth        = get_option('aa_onepage_form_width');
+            $aaFormWidth        = get_option('aa_onepage_form_width');            
             
             $basicStyleClass = '';
             if(!empty($addBasicStyleClass) && $addBasicStyleClass == '1'){
@@ -116,10 +121,16 @@ function aa_onepage_contact_form() {
                 <label for="aaonepage_contact_email">Email</label>
                 <input type="email" class="required" id="aaonepage_contact_email" name="aaonepage_contact_email" value="<?php echo $aaContact['emails']; ?>" />
             </div>
-            <div class="aa-onepage-fieldgroup">
-                <label for="aaonepage_contact_description">Message?</label>
-                <textarea name="aaonepage_contact_description" id="aaonepage_contact_description" rows="5" cols="30"><?php echo $aaContact['description']; ?></textarea>
-            </div>                
+                    
+            <?php
+                // Show the message box? 
+                if(! empty( $aaFormShowMessage )): ?>
+                <div class="aa-onepage-fieldgroup">
+                    <label for="aaonepage_contact_description">Message</label>
+                    <textarea name="aaonepage_contact_description" id="aaonepage_contact_description" rows="5" cols="30"><?php echo $aaContact['description']; ?></textarea>
+                </div>                
+            <?php endif; ?>
+                    
             <input type="submit" name="aaonepage_submit" class="aa-onepage-submit btn primary" value="Send">            
         </form>
     <?php

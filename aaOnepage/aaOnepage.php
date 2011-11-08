@@ -6,23 +6,25 @@ Description: Push leads to <a href="http://onepagecrm.com">OnepageCRM</a>.
 Author: Dave Kelly
 Version: 0.0.1
 Author URI: http://www.ambientage.com/
- * 
+ 
 
- *  Copyright 2011  David Kelly (email : plugins@ambientage.com)
+Copyright 2011  David Kelly (email : plugins@ambientage.com)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
-    published by the Free Software Foundation.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as 
+published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+http://www.gnu.org/copyleft/gpl.html 
+ 
+ */
 
 
 // Make sure we don't expose any info if called directly
@@ -54,23 +56,16 @@ if(is_admin()){
 }else{
     // frontend stuff
     wp_enqueue_style('aa-onepage', AA_ONEPAGE_FRONT_URL . 'style/onepage.css');
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('aa-onepage', AA_ONEPAGE_FRONT_URL . 'js/onepage.js');
     
     require AA_ONEPAGE_PATH. 'frontend/aa-onepage-form.php';
 }
-
 
 if( null === $onePageApi){
     $onePageApi = new AAOnepage_Api();
 }
 
-
-/*
-     if( get_transient('aa_onepage_account_details') ){
-
-    print_r( get_transient( 'aa_onepage_account_details' ) );
-}
- * 
- */
 
 // Get rid of everything on de-activation / deletion
 register_deactivation_hook( __FILE__, array( 'AAOnepage_Plugin_Admin', 'on_deactivate' ) );

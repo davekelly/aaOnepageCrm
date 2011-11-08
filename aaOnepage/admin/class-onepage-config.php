@@ -41,6 +41,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                     register_setting( 'aa_onepage_options', 'aa_onepage_pwd' );						                                        
                     register_setting( 'aa_onepage_options', 'aa_onepage_form_header' );						                                        
                     register_setting( 'aa_onepage_options', 'aa_onepage_form_width' );						                                        
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_message' ); // Display Message box
                     register_setting( 'aa_onepage_options', 'aa_onepage_basic_style' );						                                        
                     register_setting( 'aa_onepage_options', 'aa_onepage_contact_tags' );						                                        
                     register_setting( 'aa_onepage_options', 'aa_onepage_success_message' );						                                        
@@ -75,12 +76,17 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                     ?>
                         <div class="wrap">
                             <h2>Your OnePageCRM Settings</h2>
-                            <form method="post" action="options.php">    
-                                <?php
-                                    settings_fields( 'aa_onepage_options' );                    
-                                    do_settings_fields( 'aa_onepage_options', 'aaonepage_settings_page' );
-                                ?>
+
                             <table class="form-table">                           
+                                <tr>
+                                    <td colspan="2">
+                                        <form method="post" action="options.php">    
+                                        <?php
+                                            settings_fields( 'aa_onepage_options' );                    
+                                            do_settings_fields( 'aa_onepage_options', 'aaonepage_settings_page' );
+                                        ?>
+                                    </td>
+                                </tr>
                                 <tr valign="top">
                                     <th scope="row" colspan="2">
                                         <h3>OnepageCRM Details</h3>
@@ -119,7 +125,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     
                                     <tr valign="top">
                                         <th scope="row" colspan="2">
-                                            <h3>Contact Form Setup</h3>
+                                            <h3>Setup your OnepageCRM Contact Form</h3>
                                         </th>                                        
                                     </tr>
                                     
@@ -137,7 +143,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             Form Width?
                                             <br/>
                                             <small>
-                                                Set a pixel width for the form. Leave empty for 100% width. Optimal is ~260px
+                                                Set a pixel width for the form. Leave empty for 100% width. Optimal is ~280px
                                             </small>
                                         </th>          
                                         <td>
@@ -148,8 +154,10 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     <tr valign="top">
                                         <th scope="row">
                                             Use basic styling<br/>
-                                            <small>(You can write your own styles by targeting 
-                                                #aa-onepage-contactform)</small>
+                                            <small>
+                                                You can write your own styles by targeting 
+                                                #aa-onepage-contactform
+                                            </small>
                                         </th>          
                                         <td>                                            
                                             <?php $aa_onepage_basic_style = get_option('aa_onepage_basic_style'); ?>
@@ -160,11 +168,26 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     
                                     <tr valign="top">
                                         <th scope="row">
+                                            Display a box for a Message?<br/>
+                                            <small>
+                                                This will display a textarea. The message will be
+                                                stored in the Contact's "Background" in OnePageCRM
+                                            </small>
+                                        </th>          
+                                        <td>                                            
+                                            <?php $aa_onepage_form_show_message = get_option('aa_onepage_form_show_message'); ?>
+                                                <input type="checkbox" name="aa_onepage_form_show_message" value="1" 
+                                                    <?php if($aa_onepage_form_show_message == '1'){echo 'checked = "checked"';} ?> />                                                                                                       
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr valign="top">
+                                        <th scope="row">
                                             Add a tag to contacts:      
                                             <br/>
                                             <small>
-                                                (When a new contact is added, they'll be tagged
-                                                with this so you can find all your web contacts)
+                                                When a new contact is added, they'll be tagged
+                                                with this (so you can find all Contacts via the web-form).
                                             </small>
                                         </th>
                                         <td>                                           
@@ -202,21 +225,16 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             Form Submit Success Message
                                             <br/>
                                             <small>
-                                                (what the user sees when they submit the form. You're allowed
-                                                use &lt;p&gt;, &lt;strong&gt; &amp; &lt;em&gt; html tags). For styling, the message is wrapped in css
-                                                class is .aa-success-message.
+                                                What the user sees when they submit the form. You're allowed
+                                                use &lt;p&gt;, &lt;strong&gt; &amp; &lt;em&gt; html tags, if needed. For styling, the message is 
+                                                wrapped in the css class "aa-success-message".
                                             </small>
                                         </th>
                                         <td>
                                             <textarea name="aa_onepage_success_message" rows="3" cols="50"><?php echo get_option('aa_onepage_success_message'); ?></textarea>
                                         </td>
                                     </tr>
-                                    
-                                    <tr valign="top">
-                                        <td colspan="2">
-                                            <hr />
-                                        </td>
-                                    </tr>
+                                                                        
                                 <?php else: ?>                                    
                                      <?php if( is_wp_error( $account_details )): ?>
                                          <tr valign="top">
@@ -252,13 +270,32 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     </tr>
                                     
                                 <?php endif; ?>
-                                                                    
-                            </table>
-
-                            <p class="submit">
-                                <input type="submit" class="button-primary" value="Save Changes" />
-                            </p>
-                        </form>
+                                   
+                                   <tr valign="top">
+                                        <td colspan="2">
+                                            <p class="submit">
+                                                <input type="submit" class="button-primary" value="Save Changes" />
+                                            </p>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                   <tr valign="top">
+                                        <td colspan="2">
+                                            <hr />
+                                        </td>
+                                    </tr>
+                                    <tfoot>
+                                        <tr valign="top">
+                                            <th scope="row">
+                                                &nbsp;
+                                            </th>
+                                            <td>
+                                                Plugin developed by <a href="http://www.ambientage.com">Ambient Age</a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                            </table>                           
+                            
                     </div>
                     <?php 
                     

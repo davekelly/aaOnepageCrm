@@ -20,10 +20,12 @@
 
 
 /* message styling */
-#aa-onepage-contactform .aa-success-message, #aa-onepage-contactform .aa-error-message{border: 1px solid; margin: 10px 0px; padding:15px 10px; text-align: center;}
+/* message styling */
+#aa-onepage-contactform .aa-success-message, #aa-onepage-contactform .aa-error-message, .aa-form-error{border: 1px solid; margin: 10px 0px; padding:15px 10px; text-align: center;}
 #aa-onepage-contactform .aa-success-message{ color: #4F8A10; background-color: #DFF2BF; }
-#aa-onepage-contactform .aa-error-message{ color: #D8000C; background-color: #FFBABA; }
-    #aa-onepage-contactform .aa-success-message p, #aa-onepage-contactform .aa-error-message p{margin: 0 0 0 0 ; padding: 0 0 0 0;}
+#aa-onepage-contactform .aa-error-message, .aa-form-error{ color: #D8000C; background-color: #FFBABA; }
+    div.aa-form-error{ margin: 5px 0px; padding:5px 10px; font-size: .9em;}
+        #aa-onepage-contactform .aa-success-message p, #aa-onepage-contactform .aa-error-message p{margin: 0 0 0 0 ; padding: 0 0 0 0;}
 
 /* form fields */
 #aa-onepage-contactform .aa-onepage-fieldgroup{margin-bottom: 5px;}

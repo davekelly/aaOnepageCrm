@@ -4,23 +4,13 @@
 class AAOnepage_Api{
     
     protected $apiVersion   = 'Version 1.2';
-    protected $apiUrl       = 'https://app.onepagecrm.com/api/'; 
+    protected $apiUrl       = 'https://app.onepagecrm.com/api/';
     protected $apiFormat    = '.json';
     protected $uid          = null;       // onepage userid
     protected $apiKey       = null;
     protected $username;
     protected $password;
-    
-    
-    public function __construct() {
-        
-        if(null === $this->uid || null === $this->apiKey){            
-           $this->getOnePageAccount();            
-        }
-    }
-    
-    
-    
+
     public function getOnePageAccount(){
          // Have we account details already?
         $account_details = get_transient( 'aa_onepage_account_details' );           
@@ -65,19 +55,28 @@ class AAOnepage_Api{
      * @return Object 
      */
     public function doApiCall( $url, $args, $method = 'GET', $requireAuth = true){
-                
+        // Are we logged in?
+        if((null === $this->uid || null === $this->apiKey) && $requireAuth){
+            $this->getOnePageAccount();
+        }
+
         $defaults = array(
             'sslverify'     => false,          // Getting SSL errors related to CA cert...this skips them
             'method'        => $method,
             'timeout'       => 5,
             'redirection'   => 5,
-            'httpversion'   => '1.0',
+            'httpversion'   => '1.1',
             'blocking'      => true,
             'headers'       => array(),
             'body'          => null,
             'cookies'       => array()
         );        
         $args = wp_parse_args( $args , $defaults);
+
+        // Get hostname from URL
+        $url_data = array();
+        preg_match('/http[s]?:\/\/([^\/]+)/', $this->apiUrl, $url_data);
+        $args['headers']['Host'] = $url_data[1];
         
         $url = $this->apiUrl . $url . $this->apiFormat;
                 
@@ -147,17 +146,13 @@ class AAOnepage_Api{
             $httpBody   = http_build_query( $body, null, '&' );
             $shaBody    = hash('sha1', $httpBody );
             $authKey   .= '.' . $shaBody;
-        }            
+        }
 
-        $shaKey = hash_hmac('sha256', $authKey , $apiKey  );                        
-
-        $authHeaders = array(
+        return array(
             'X-OnePageCRM-UID'  => $uid,
             'X-OnePageCRM-TS'   => $timestamp,
-            'X-OnePageCRM-Auth' => $shaKey
+            'X-OnePageCRM-Auth' => hash_hmac('sha256', $authKey , $apiKey  )
         );
-
-        return $authHeaders;        
     }
     
     

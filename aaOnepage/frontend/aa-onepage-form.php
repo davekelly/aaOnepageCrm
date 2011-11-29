@@ -32,9 +32,7 @@ function aa_onepage_contact_form() {
 
         if (isset( $_POST['aaonepage_added'] ) && wp_verify_nonce($_POST['aaonepage_added'], 'add-contact') ){            
             // nonce is ok, go ahead
-            if(null === $onePageApiContact){               
-                $onePageApiContact = new AAOnepage_Api_Contact();
-            }                           
+            $onePageApiContact = new AAOnepage_Api_Contact();
             $onePageResponse = $onePageApiContact->createContact( $aaContact );            
             
             // Handle response...
@@ -166,6 +164,6 @@ function aa_onepage_contact_form() {
     <?php
        
 
-}
+};
 
 add_shortcode('aa_onepage_form', aa_onepage_contact_form);

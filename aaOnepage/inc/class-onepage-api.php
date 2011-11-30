@@ -1,6 +1,4 @@
 <?php
-
-
 class AAOnepage_Api{
     
     protected $apiVersion   = 'Version 1.2';
@@ -8,8 +6,9 @@ class AAOnepage_Api{
     protected $apiFormat    = '.json';
     protected $uid          = null;       // onepage userid
     protected $apiKey       = null;
-    protected $username;
-    protected $password;
+    protected $username     = null;
+    protected $password     = null;
+    protected $sslVerify    = false;
 
     public function getOnePageAccount(){
          // Have we account details already?
@@ -38,10 +37,12 @@ class AAOnepage_Api{
         }else{
             // have a transient account details obj => grab the uid  & key              
             $this->setUid( $account_details->data->uid );
-            $this->setApiKey( $account_details->data->key );
+            $this->setApiKey( base64_decode($account_details->data->key));
             
             return $account_details; 
         }
+
+        return null; // Shouldn't get here
     }
     
     /**
@@ -75,7 +76,7 @@ class AAOnepage_Api{
 
         // Get hostname from URL
         $url_data = array();
-        preg_match('/http[s]?:\/\/([^\/]+)/', $this->apiUrl, $url_data);
+        preg_match('/^http[s]?:\/\/([^\/]+)/', $this->apiUrl, $url_data);
         $args['headers']['Host'] = $url_data[1];
         
         $url = $this->apiUrl . $url . $this->apiFormat;
@@ -83,17 +84,14 @@ class AAOnepage_Api{
         // Auth not required for Login method only
         if($requireAuth){                                       
             
-            if(isset( $args['body'])){                
-                
+            if(isset( $args['body'])){
                 $auth = $this->calculateAuth( $url, $method, $args['body'] );
             }else{
                 $auth = $this->calculateAuth( $url, $method );
             }
                         
             // set onepage auth headers
-            foreach($auth as $key => $val){
-                $args['headers'][$key] = $val; 
-            }
+            $args['headers'] = array_merge($args['headers'], $auth);
         } 
         
         // DELETE also needs a querystring, but it's not being implemented here
@@ -117,6 +115,7 @@ class AAOnepage_Api{
              * @todo manage WP http error
              */
             print_r( $response );
+            return null;
         }
               
     }
@@ -182,7 +181,8 @@ class AAOnepage_Api{
         }else{
            return new WP_Error('broke', __( $loginData->message ));
         }        
-        
+
+        return null;
     }
     
     
@@ -207,8 +207,7 @@ class AAOnepage_Api{
      * @param String $key 
      */
     public function setApiKey( $key ){
-        // Key is returned from the api encoded...
-        $this->apiKey = base64_decode( $key );
+        $this->apiKey = $key;
     }
     
     public function getApiKey(){

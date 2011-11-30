@@ -140,7 +140,7 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         
         $resp = wp_mail($to, $subject, $message);
         
-        if(! is_wp_error( $response ) ){
+        if(! is_wp_error( $resp ) ){
             return true;
         }else{
             // at this point, you're pretty much screwed...the user gets an error message

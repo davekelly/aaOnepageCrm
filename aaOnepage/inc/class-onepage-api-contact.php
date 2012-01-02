@@ -3,7 +3,6 @@
  * Interact with the OnePageCRM Contacts api
  * 
  * @author Dave Kelly (@davkell / http://www.ambientage.com)
- * @version 0.1
  * @link http://www.onepagecrm.com/api/api-doc-for-dev-contacts.html
  */
 class AAOnepage_Api_Contact extends AAOnepage_Api{
@@ -17,9 +16,9 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         $contactDefaultValues = array(
             'firstname'     => '',                                          // Contact firstname
             'lastname'      => '',                                          // Contact lastname
-            'company'       => '',                                          // Company name
+            'company'       => 'Not Given',                                 // Company name
             'job_title'     => null,                                        // Contact’s job title
-            'address'       => null,                                          // Address
+            'address'       => null,                                        // Address
             'city'          => null,                                         // City (address)
             'state'         => null,                                         // State (address)
             'zip_code'      => null,                                         // ZIP code (address)
@@ -67,6 +66,74 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         return  new WP_Error('broke', __( $onePageContact->message ));
     }
 
+    
+    /**
+     * Validate the frontend form's data before sending to onepage
+     * 
+     * @param Mixed $contactInfo
+     * @param Mixed $formConfig
+     * @return Bool true on isValid | Array $errors ( $key=>$value  = "field name" => "error messages" )
+     */
+    public function validateContact( $contactInfo, $formConfig ){
+        
+        $errors = array();
+        
+        // Validate Name
+        if( $formConfig['name']['show'] == '1' && $formConfig['name']['required'] == '1'){
+            if( empty ($contactInfo['firstname']) ){
+                $errors['aaonepage_contact_fullname'] = $formConfig['name']['error']['required'];
+            }elseif( empty( $contactInfo['lastname'])){
+                $errors['aaonepage_contact_fullname'] = $formConfig['name']['error']['firstname'];
+            }
+        }
+        
+        // Validate company
+        if( $formConfig['company']['show'] == '1' && $formConfig['company']['required'] == '1'){
+            if( empty ($contactInfo['company']) ) {
+                $errors['aaonepage_contact_company'] = $formConfig['company']['error']['required'];
+            }
+        }
+        
+        // Validate emails
+        if( $formConfig['email']['show'] == '1' ) {
+            // is required && !empty
+            if( $formConfig['email']['required'] == '1'){
+                if( empty ($contactInfo['emails']) ) {
+                    $errors['aaonepage_contact_email'] = $formConfig['email']['error']['required'];
+                }
+            }
+            // not required, but preseent & invalid
+            if( !empty( $contactInfo['emails']  ) && ! is_email( $contactInfo['emails'] )){
+                $errors['aaonepage_contact_email'] = $formConfig['email']['error']['invalid'];
+            }
+        }
+        
+        // Validate phone
+        if( $formConfig['phone']['show'] == '1' ) {
+            // is required && !empty
+            if( $formConfig['phone']['required'] == '1'){
+                if( empty ($contactInfo['phones']) ) {
+                    $errors['aaonepage_contact_phone'] = $formConfig['phone']['error']['required'];
+                }
+            }            
+        }
+        
+        // Validate message / description
+        if( $formConfig['message']['show'] == '1' ) {
+            // is required && !empty
+            if( $formConfig['message']['required'] == '1'){
+                if( empty ($contactInfo['description']) ) {
+                    $errors['aaonepage_contact_description'] = $formConfig['message']['error']['required'];
+                }
+            }            
+        }
+        
+        if(count ( $errors ) > 0){
+            return $errors;
+        }
+        return true;
+    }
+    
     
     /**
      * Create a new action for a contact.
@@ -143,8 +210,8 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         if(! is_wp_error( $resp ) ){
             return true;
         }else{
-            // at this point, you're pretty much screwed...the user gets an error message
-            // telling them the form isn't working
+            // at this point, you're pretty much screwed...the user gets 
+            // an error message telling them the form isn't working
             return false;
         }
         

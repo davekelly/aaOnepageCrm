@@ -2,7 +2,7 @@
 /**
  * @package aa_onepage
  * 
- * Based on Yoast's Wordpress SEO Plugin Admin Class
+ * Structure based on Yoast's Wordpress SEO Plugin Admin Class
  */
 
 
@@ -18,7 +18,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
 		var $ozhicon		= 'tag.png';
 		
 		function AAOnepage_Admin() {
-			add_action( 'init', array(&$this, 'init') );
+                    add_action( 'init', array(&$this, 'init') );
 		}
 		
 		function init() {
@@ -38,16 +38,29 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
 
 		function options_init() {
                     register_setting( 'aa_onepage_options', 'aa_onepage_username' );						
-                    register_setting( 'aa_onepage_options', 'aa_onepage_pwd' );						                                        
+                    register_setting( 'aa_onepage_options', 'aa_onepage_pwd' );	
+                    
+                    // Frontend form setup
                     register_setting( 'aa_onepage_options', 'aa_onepage_form_header' );						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_width' );						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_message' ); // Display Message box
-                    register_setting( 'aa_onepage_options', 'aa_onepage_basic_style' );						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_contact_tags' );						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_success_message' );						                                        
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_width' );						                                                            
+                    register_setting( 'aa_onepage_options', 'aa_onepage_basic_style' );						                                                            						                                        
+                    register_setting( 'aa_onepage_options', 'aa_onepage_success_message' );		
+                    
+                    // Tag to assign in OnePage
+                    register_setting( 'aa_onepage_options', 'aa_onepage_contact_tags' );
+                    
+                    // Form fields to display & require                    
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_phone' );		
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_phone' );		                    
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_email' );		
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_email' );		                    
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_message' );		
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_message' );		                    
 		}
 						
-		
+		/**
+                 * Sidebar for the admin page. Not implemented yet.
+                 */
 		function admin_sidebar() {
 		?>
 			<div class="postbox-container" style="width:20%;">
@@ -155,31 +168,18 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                         <th scope="row">
                                             Use basic styling<br/>
                                             <small>
-                                                You can write your own styles by targeting 
+                                                Alternatively, you can write your own styles by targeting 
                                                 #aa-onepage-contactform
                                             </small>
                                         </th>          
                                         <td>                                            
-                                            <?php $aa_onepage_basic_style = get_option('aa_onepage_basic_style'); ?>
+                                            <?php 
+                                                $aa_onepage_basic_style = get_option('aa_onepage_basic_style');                                                 
+                                            ?>
                                                 <input type="checkbox" name="aa_onepage_basic_style" value="1" 
                                                     <?php if($aa_onepage_basic_style == '1'){echo 'checked = "checked"';} ?> />                                                                                                       
                                         </td>
-                                    </tr>
-                                    
-                                    <tr valign="top">
-                                        <th scope="row">
-                                            Display a box for a Message?<br/>
-                                            <small>
-                                                This will display a textarea. The message will be
-                                                stored in the Contact's "Background" in OnePageCRM
-                                            </small>
-                                        </th>          
-                                        <td>                                            
-                                            <?php $aa_onepage_form_show_message = get_option('aa_onepage_form_show_message'); ?>
-                                                <input type="checkbox" name="aa_onepage_form_show_message" value="1" 
-                                                    <?php if($aa_onepage_form_show_message == '1'){echo 'checked = "checked"';} ?> />                                                                                                       
-                                        </td>
-                                    </tr>
+                                    </tr>                                                                        
                                     
                                     <tr valign="top">
                                         <th scope="row">
@@ -234,8 +234,180 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             <textarea name="aa_onepage_success_message" rows="3" cols="50"><?php echo get_option('aa_onepage_success_message'); ?></textarea>
                                         </td>
                                     </tr>
-                                                                        
-                                <?php else: ?>                                    
+          <!-- Field settings -->                                                   
+                                    <tr valign="top">
+                                        <td colspan="2">
+                                            <hr />
+                                        </td>
+                                    </tr>                                    
+                                    <tr valign="top">
+                                        <th scope="row" colspan="2">
+                                            <h3>Information to Capture</h3>
+                                        </th>                                        
+                                    </tr>
+                                    <tr valign="top">
+                                        <th scope="row">
+                                            Form fields to display
+                                        </th>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>
+                                                            Field
+                                                        </strong>
+                                                    </th>
+                                                    <td>
+                                                        <strong>
+                                                            Don't Show
+                                                        </strong>                                                        
+                                                    </td>
+                                                    <td>
+                                                        <strong>
+                                                            Show
+                                                        </strong>                                                        
+                                                    </td>
+                                                    <td>
+                                                        <strong>
+                                                            Is Required?
+                                                        </strong>                                                        
+                                                    </td>
+                                                </tr>
+                                 <!-- Name -->
+                                                <tr valign="top">
+                                                    <th scope="row">
+                                                        Name<br/>                                   
+                                                        <?php // $aa_onepage_form_show_name = get_option('aa_onepage_form_show_name'); ?>
+                                                        <?php // $aa_onepage_form_require_name = get_option('aa_onepage_form_require_name'); ?>
+                                                    </th>          
+                                                    <td colspan="3">                                                                                                    
+                                                        (required by OnePageCRM)
+                                                    </td>
+                                                    <?php 
+                                                    /*
+                                                        <input type="radio" name="aa_onepage_form_show_name" value="0" 
+                                                            <?php if($aa_onepage_form_show_name == '0'){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>
+                                                    <td>                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_name" value="1" 
+                                                            <?php if($aa_onepage_form_show_name == '1' || empty($aa_onepage_form_show_name) ){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>                                                      
+                                                    <td>
+                                                        <input type="checkbox" name="aa_onepage_form_require_name" value="1" 
+                                                            <?php if($aa_onepage_form_require_name == '1' || empty($aa_onepage_form_require_name) ){echo 'checked = "checked"';} ?> />
+                                                    </td>
+                                                     * 
+                                                     */ ?>
+                                                </tr>
+                                                
+                                 <!-- Company -->
+                                                <tr valign="top">
+                                                    <th scope="row">
+                                                        Company <br/>                                   
+                                                        <?php 
+                                                        //    $aa_onepage_form_show_company = get_option('aa_onepage_form_show_company'); 
+                                                        //    $aa_onepage_form_require_company = get_option('aa_onepage_form_require_company'); 
+                                                        ?>
+                                                    </th> 
+                                                    <td colspan="3">                                                                                                    
+                                                        (required by OnePageCRM)
+                                                    </td>
+                                                    <?php 
+                                                    /*
+                                                    <td>                                                                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_company" value="0" 
+                                                            <?php if($aa_onepage_form_show_company == '0'){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>
+                                                    <td>                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_company" value="1" 
+                                                            <?php if($aa_onepage_form_show_company == '1' || empty( $aa_onepage_form_show_company ) ){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>                                                      
+                                                    <td>
+                                                        <input type="checkbox" name="aa_onepage_form_require_company" value="1" 
+                                                            <?php if($aa_onepage_form_require_company == '1' || empty( $aa_onepage_form_require_company ) ){echo 'checked = "checked"';} ?> />
+                                                    </td>
+                                                     * 
+                                                     */ ?>
+                                                </tr>
+                                                
+                                   <!-- email -->             
+                                                <tr valign="top">
+                                                    <th scope="row">
+                                                        Email<br/>                                   
+                                                        <?php 
+                                                            $aa_onepage_form_show_email    = get_option('aa_onepage_form_show_email');
+                                                            $aa_onepage_form_require_email = get_option('aa_onepage_form_require_email'); 
+                                                        ?>
+                                                    </th>         
+                                                    <td>                                                                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_email" value="0" 
+                                                            <?php if($aa_onepage_form_show_email == '0'){echo ' checked = "checked"';} ?> />                                                                                                       
+                                                    </td>
+                                                    <td>                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_email" value="1" 
+                                                            <?php if($aa_onepage_form_show_email == '1' ){echo ' checked = "checked"';} ?> />                                                                                                       
+                                                    </td>                                                      
+                                                    <td>
+                                                        <input type="checkbox" name="aa_onepage_form_require_email" value="1" 
+                                                            <?php if($aa_onepage_form_require_email == '1' ){echo 'checked = "checked"';} ?> />
+                                                    </td>                                                     
+                                                </tr>
+                                                
+                            <!-- Phone -->             
+                                                <tr valign="top">
+                                                    <th scope="row">
+                                                        Phone<br/>                                   
+                                                        <?php $aa_onepage_form_show_phone    = get_option('aa_onepage_form_show_phone'); ?>
+                                                        <?php $aa_onepage_form_require_phone = get_option('aa_onepage_form_require_phone'); ?>
+                                                    </th>          
+                                                    <td>                                                                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_phone" value="0" 
+                                                            <?php if($aa_onepage_form_show_phone == '0'){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>
+                                                    <td>                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_phone" value="1" 
+                                                            <?php if($aa_onepage_form_show_phone == '1' ){echo 'checked = "checked"';} ?> />                                                                                                       
+                                                    </td>                                                      
+                                                    <td>
+                                                        <input type="checkbox" name="aa_onepage_form_require_phone" value="1" 
+                                                            <?php if($aa_onepage_form_require_phone == '1'  ){echo 'checked = "checked"';} ?> />
+                                                    </td>
+                                                </tr>
+                                                
+                               <!-- message -->                 
+                                                <tr valign="top">
+                                                    <th scope="row">
+                                                        Message<br/>
+                                                        <small>
+                                                            (The message will be stored in the 
+                                                            Contact's "Background" in OnePageCRM)
+                                                        </small>
+                                                        <?php 
+                                                            $aa_onepage_form_show_message    = get_option('aa_onepage_form_show_message'); 
+                                                            $aa_onepage_form_require_message = get_option('aa_onepage_form_require_message');                                                            
+                                                        ?>                                                        
+                                                    </th>          
+                                                    <td>                                                                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_message" id="aa_onepage_form_show_message" value="0" 
+                                                            <?php if($aa_onepage_form_show_message == '0'){echo ' checked = "checked"';} ?> />                                                                                                       
+                                                    </td>
+                                                    <td>                                                    
+                                                        <input type="radio" name="aa_onepage_form_show_message" id="aa_onepage_form_show_message" value="1" 
+                                                            <?php if($aa_onepage_form_show_message == '1'){echo ' checked = "checked"';} ?> />                                                                                                       
+                                                    </td>                                                      
+                                                    <td>
+                                                        <input type="checkbox" name="aa_onepage_form_require_message" id="aa_onepage_form_require_message" value="1" 
+                                                            <?php if($aa_onepage_form_require_message == '1'){echo ' checked = "checked"';} ?> 
+                                                               />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>                                    
+                                    
+                                    
+                                <?php else: ?>                
+                                    <?php // Either not signed in, or a sign-in error: ?>
                                      <?php if( is_wp_error( $account_details )): ?>
                                          <tr valign="top">
                                             <th scope="row" colspan="2">
@@ -291,6 +463,8 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             </th>
                                             <td>
                                                 Plugin developed by <a href="http://www.ambientage.com">Ambient Age</a>
+                                                <span style="padding: 0 2em;">|</span>
+                                                <a href="https://github.com/davekelly/aaOnepageCrm/issues">Report Bugs / Issues</a>
                                             </td>
                                         </tr>
                                     </tfoot>

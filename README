@@ -3,7 +3,13 @@ A Wordpress plugin to push leads to your onepagecrm.com account
 
 == Description ==
 
-Push leads to your onepagecrm account through a contact form on your site
+Push leads to your OnePageCRM account through a form on your site.
+
+The plugin allows you to capture a Lead's Name, Company, Phone, Email and a message. 
+
+New leads are given an Urgent "Next Action", along with a message of "Web Contact: Callback". 
+You have the option of selecting a OnePageCRM tag you have set up to add to new leads 
+(useful for identifying leads coming through your site).
 
 
 == Installation ==
@@ -11,10 +17,13 @@ Push leads to your onepagecrm account through a contact form on your site
 1. Upload the directory `aaOnepage` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Visit the plugin settings and sign into your onepage account
-1. use the shortcode [aa_onepage_form] or place `<?php aa_onepage_form(); ?>` in your template
+1. use the shortcode [aa_onepage_form] in a WordPress Page or Post, or place `<?php aa_onepage_form(); ?>` in your template
 
 
 == Changelog ==
+= 0.1 = 
+* Added validation front/back-end
+* Ability to choose fields to display & require on front-end form
 
 = 0.0.1 =
 * Initial Release. Probably best not to use on a production site just yet.

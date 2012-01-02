@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: AA OnepageCRM Add-in
-Plugin URI: http://www.ambientage.com/plugins/onepage/
-Description: Capture leads on your site and push them to <a href="http://onepagecrm.com">OnepageCRM</a>.
+Plugin URI: http://www.ambientage.com/blog/plugins/onepage/
+Description: Push leads to <a href="http://onepagecrm.com">OnepageCRM</a>.
 Author: Dave Kelly
-Version: 0.1.1
+Version: 0.1
 Author URI: http://www.ambientage.com/
  
 
-Copyright 2012  David Kelly (email : plugins@ambientage.com)
+Copyright 2011  David Kelly (email : plugins@ambientage.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as 
@@ -33,7 +33,7 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
-define( 'AA_ONEPAGE', '0.0.1' );
+define( 'AA_ONEPAGE', '0.1.1' );
 
 $pluginurl = plugin_dir_url(__FILE__);
 if ( preg_match( '/^https/', $pluginurl ) && !preg_match( '/^https/', get_bloginfo('url') ) )
@@ -57,7 +57,7 @@ if(is_admin()){
     // frontend stuff
     wp_enqueue_style('aa-onepage', AA_ONEPAGE_FRONT_URL . 'frontend/style/onepage.css');
     wp_enqueue_script('jquery');
-    wp_enqueue_script('aa-onepage', AA_ONEPAGE_FRONT_URL . 'frontend/js/onepage.js');
+    wp_enqueue_script('aa-onepage', AA_ONEPAGE_FRONT_URL . 'frontend/js/onepage.js', array('jquery'), AA_ONEPAGE, true );
     
     require AA_ONEPAGE_PATH. 'frontend/aa-onepage-form.php';
 }

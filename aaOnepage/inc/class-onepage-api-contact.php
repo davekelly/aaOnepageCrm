@@ -75,7 +75,7 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
      * @return Bool true on isValid | Array $errors ( $key=>$value  = "field name" => "error messages" )
      */
     public function validateContact( $contactInfo, $formConfig ){
-        
+                
         $errors = array();
         
         // Validate Name

@@ -54,16 +54,13 @@ function aa_onepage_contact_form() {
         $fullname                   = $_POST['aaonepage_contact_fullname'];
         $aaContact['emails']        = $_POST['aaonepage_contact_email'];
         $aaContact['phones']        = $_POST['aaonepage_contact_phone'];
-        $aaContact['company']       = $_POST['aaonepage_contact_company'];
-        
-        if( !empty( $aaFormShowMessage )){
-            $aaContact['description']   = $_POST['aaonepage_contact_description'];
-        }
-    
+        $aaContact['company']       = $_POST['aaonepage_contact_company'];                
+        $aaContact['description']   = $_POST['aaonepage_contact_description'];
+            
         // Break name into first & last
         list($firstname, $lastname) = preg_split('/\s+(?=[^\s]+$)/', $fullname, 2);    
-        $aaContact['firstname']     = $firstname;
-        $aaContact['lastname']      = empty ( $lastname ) ? $lastname : '';
+        $aaContact['firstname']     = $firstname;        
+        $aaContact['lastname']      = !empty ( $lastname ) ? $lastname : '';
                         
 
         if (isset( $_POST['aaonepage_added'] ) && wp_verify_nonce($_POST['aaonepage_added'], 'add-contact') ){            

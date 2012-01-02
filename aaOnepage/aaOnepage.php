@@ -4,7 +4,7 @@ Plugin Name: AA OnepageCRM Add-in
 Plugin URI: http://www.ambientage.com/blog/plugins/onepage/
 Description: Push leads to <a href="http://onepagecrm.com">OnepageCRM</a>.
 Author: Dave Kelly
-Version: 0.1
+Version: 0.1.1
 Author URI: http://www.ambientage.com/
  
 

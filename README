@@ -17,7 +17,7 @@ You have the option of selecting a OnePageCRM tag you have set up to add to new 
 1. Upload the directory `aaOnepage` to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Visit the plugin settings and sign into your onepage account
-1. use the shortcode [aa_onepage_form] in a WordPress Page or Post, or place `<?php aa_onepage_form(); ?>` in your template
+1. use the shortcode [aa_onepage_form] in a WordPress Page or Post, or place `<?php echo aa_onepage_form(); ?>` in your template
 
 
 == Changelog ==

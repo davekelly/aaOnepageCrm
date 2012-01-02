@@ -77,8 +77,7 @@ function aa_onepage_contact_form() {
                 $aa_error_message_text = 'The form had errors.';
                 
             }else{
-                // Valid form....send to onepage
-                die(' hit valid ');
+                // Valid form....send to onepage                
                 $onePageResponse    = $onePageApiContact->createContact( $aaContact );                        
 
                 // Handle response...
@@ -132,137 +131,148 @@ function aa_onepage_contact_form() {
             if(!empty($aaFormWidth)){
                 $setFormWidth = $aaFormWidth . 'px;';
             }            
-        ?>
-        <form style="width: <?php echo $setFormWidth; ?>" id="aa-onepage-contactform" class="<?php echo $basicStyleClass;?>" method="post" action="">
-            <h3>
-                <?php 
+        
+        $formOutput = '';
+        
+        $formOutput .= '<form style="width: '. $setFormWidth .'" id="aa-onepage-contactform" class="'. $basicStyleClass .'" method="post" action="">
+            <h3>';
+                
                   // Custom heading set?
                   if(!empty( $aa_form_header )){
-                       echo $aa_form_header; 
+                       $formOutput .= $aa_form_header; 
                   }else{
-                      echo 'Request a callback'; 
+                      $formOutput .= 'Request a callback'; 
                   }
-                ?>
-            </h3>
+            $formOutput .= '</h3>';
             
-            <?php wp_nonce_field('add-contact','aaonepage_added'); ?>
-            <?php if($aa_show_error_message): ?>
-                    <p class="aa-error-message">
-                         <?php echo $aa_error_message_text; ?>
-                    </p>
-            <?php endif; ?>            
+            $formOutput .= wp_nonce_field('add-contact','aaonepage_added', true, false); 
+            
+            if($aa_show_error_message){ 
+                $formOutput .= '<p class="aa-error-message">'
+                                     . $aa_error_message_text . 
+                                '</p>';
+            }             
 
-<!-- Name -->                    
-            <?php if( $aaFormConfig['name']['show'] == '1' ): ?>
-                <div class="aa-onepage-fieldgroup">
+//  Name 
+            if( $aaFormConfig['name']['show'] == '1' ): 
+                $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_fullname">Name</label>
-                    <input type="text" id="aaonepage_contact_fullname" name="aaonepage_contact_fullname" value="<?php echo $fullname; ?>" 
-                       <?php if( $aaFormConfig['name']['required'] == '1'){ ?> class="required" <?php } ?> />
-                    <?php if(isset( $isValid['aaonepage_contact_fullname'] ) ): ?>
-                            <div class="aa-error-message-form">
-                                <?php echo $isValid['aaonepage_contact_fullname']; ?>
-                            </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+                    <input type="text" id="aaonepage_contact_fullname" name="aaonepage_contact_fullname" value="' . $fullname .'"';
+                     if( $aaFormConfig['name']['required'] == '1'){  
+                         $formOutput .= 'class="required"';
+                     } 
+                     $formOutput .= '/>';
+                     
+                     if(isset( $isValid['aaonepage_contact_fullname'] ) ): 
+                            $formOutput .= '<div class="aa-error-message-form">'.
+                                                $isValid['aaonepage_contact_fullname'] .
+                                           '</div>';
+                    endif;
+                $formOutput .= '</div>';
+            endif; 
 
-<!-- Company -->                    
-            <?php if( $aaFormConfig['company']['show'] == '1' ): ?>
-                <div class="aa-onepage-fieldgroup">
+// Company                     
+            if( $aaFormConfig['company']['show'] == '1' ){
+                $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_company">Company </label>
-                    <input type="text" id="aaonepage_contact_company" name="aaonepage_contact_company" value="<?php echo $aaContact['company'] ?>" 
-                        <?php if( $aaFormConfig['company']['required'] == '1'){ ?> class="required" <?php } ?> />
+                    <input type="text" id="aaonepage_contact_company" name="aaonepage_contact_company" value="'. $aaContact['company'] .'"';
+                        if( $aaFormConfig['company']['required'] == '1'){ 
+                            $formOutput .= 'class="required"';                            
+                        }
+                        $formOutput .= '/>';
                     
-                    <?php if(isset( $isValid['aaonepage_contact_company'] ) ):  // any errors? ?>
-                            <div class="aa-error-message-form">
-                                <?php echo $isValid['aaonepage_contact_company']; ?>
-                            </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+                if(isset( $isValid['aaonepage_contact_company'] ) ){  // any errors? 
+                            $formOutput .= '<div class="aa-error-message-form">' .
+                                $isValid['aaonepage_contact_company'] .
+                            '</div>';
+                }
+                $formOutput .= '</div>';
+            }
 
-<!-- Phone -->
-            <?php if( $aaFormConfig['phone']['show'] == '1' ): ?>
-                <div class="aa-onepage-fieldgroup">
+// Phone 
+            if( $aaFormConfig['phone']['show'] == '1' ): 
+                $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_phone">Phone</label>
-                    <input type="text" id="aaonepage_contact_phone" name="aaonepage_contact_phone" value="<?php echo $aaContact['phones']; ?>" 
-                        <?php if( $aaFormConfig['phone']['required'] == '1'){ ?> class="required" <?php } ?> />
+                    <input type="text" id="aaonepage_contact_phone" name="aaonepage_contact_phone" value="'. $aaContact['phones'] .'"';
+                        if( $aaFormConfig['phone']['required'] == '1'){ 
+                            $formOutput .= 'class="required"';                             
+                        } 
+                        $formOutput .= '/>';
                     
-                    <?php if(isset( $isValid['aaonepage_contact_phone'] ) ): ?>
-                            <div class="aa-error-message-form">
-                                <?php echo $isValid['aaonepage_contact_phone']; ?>
-                            </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+                    if(isset( $isValid['aaonepage_contact_phone'] ) ):
+                            $formOutput .= '<div class="aa-error-message-form">'.
+                                    $isValid['aaonepage_contact_phone'] .
+                            '</div>';
+                    endif; 
+                $formOutput .= '</div>';
+            endif;
 
-<!-- Email -->
-            <?php if( $aaFormConfig['email']['show'] == '1' ): ?>
-                <div class="aa-onepage-fieldgroup">
+//  Email 
+            if( $aaFormConfig['email']['show'] == '1' ): 
+                $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_email">Email</label>
-                    <input type="email" id="aaonepage_contact_email" name="aaonepage_contact_email" value="<?php echo $aaContact['emails']; ?>" class="email 
-                        <?php if( $aaFormConfig['email']['required'] == '1'){ ?> required <?php } ?>" />
+                    <input type="email" id="aaonepage_contact_email" name="aaonepage_contact_email" value="'. $aaContact['emails'] .'" class="email ';
+                    if( $aaFormConfig['email']['required'] == '1'){ 
+                        $formOutput .= ' required ';
+                    } 
+                    $formOutput .= '" />';
                     
-                    <?php if(isset( $isValid['aaonepage_contact_email'] ) ): ?>
-                            <div class="aa-error-message-form">
-                                <?php echo $isValid['aaonepage_contact_email']; ?>
-                            </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+                    if(isset( $isValid['aaonepage_contact_email'] ) ): 
+                        $formOutput .= '<div class="aa-error-message-form">' .
+                                            $isValid['aaonepage_contact_email']
+                                    . '</div>';
+                    endif;
+                $formOutput .= '</div>';
+            endif; 
 
-<!-- Message -->
-           <?php if( $aaFormConfig['message']['show'] == '1') : ?>
-                <div class="aa-onepage-fieldgroup">
+// Message
+           if( $aaFormConfig['message']['show'] == '1') : 
+                $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_description">Message</label>
-                    <textarea name="aaonepage_contact_description" id="aaonepage_contact_description" rows="5" cols="30"
-                              <?php if( $aaFormConfig['message']['required'] == '1'){ ?> class="required" <?php } ?>
-                              ><?php echo $aaContact['description']; ?></textarea>
+                    <textarea name="aaonepage_contact_description" id="aaonepage_contact_description" rows="5" cols="30"';
+                   if( $aaFormConfig['message']['required'] == '1'){ 
+                       $formOutput .= 'class="required"';
+                   } 
+                   $formOutput .= '>' . $aaContact['description'] . '</textarea>';
                     
-                    <?php if(isset( $isValid['aaonepage_contact_description'] ) ): ?>
-                            <div class="aa-error-message-form">
-                                <?php echo $isValid['aaonepage_contact_description']; ?>
-                            </div>
-                    <?php endif; ?>
-                </div>                
-            <?php endif; ?>
+                   if(isset( $isValid['aaonepage_contact_description'] ) ): 
+                        $formOutput .= '<div class="aa-error-message-form">' .
+                                            $isValid['aaonepage_contact_description']
+                                    . '</div>';
+                    endif; 
+                $formOutput .= '</div>';                
+            endif; 
 
-<!-- Submit -->
-            <input type="submit" name="aaonepage_submit" class="aa-onepage-submit btn primary" value="Send">            
-        </form>
-    <?php
+// Submit 
+            $formOutput .= '<input type="submit" name="aaonepage_submit" class="aa-onepage-submit btn primary" value="Send">            
+        </form>';
     
-    // Form Submitted. All is good.
-    }elseif( $aa_success_message){ ?>
-        <div id="aa-onepage-contactform"
+// Form Submitted. All is good.
+    }elseif( $aa_success_message){ 
+        $formOutput .= '<div id="aa-onepage-contactform"
         <h3>Message Sent</h3>
-        <div class="aa-success-message">
-            <?php 
-            $aa_success_message_text = get_option('aa_onepage_success_message'); 
-            if(isset( $aa_success_message_text ) && !empty( $aa_success_message_text )){
-                // only allowing html p tags...
-                $cleaned = wp_kses($aa_success_message_text, array('p' => array('class' => array(), 'id' => array() ), 'strong' => array(), 'em' => array() ) );
-                echo $cleaned;
-            }else{ 
-                // Show default success message
-                ?>
-                <p>
-                    Thank you. Your details have been submitted and we will be
-                    in touch shortly.
-                </p>
+        <div class="aa-success-message">';
 
-       <?php } ?>
+        $aa_success_message_text = get_option('aa_onepage_success_message'); 
+        if(isset( $aa_success_message_text ) && !empty( $aa_success_message_text )){
+            // only allowing html p tags...
+            $cleaned = wp_kses($aa_success_message_text, array('p' => array('class' => array(), 'id' => array() ), 'strong' => array(), 'em' => array() ) );
+            $formOutput .= $cleaned;
+        }else{ 
+            // Show default success message
+            $formOutput .= '<p>
+                Thank you. Your details have been submitted and we will be
+                in touch shortly.
+            </p>';
+
+        } 
                 
-            </div>
-        </div>
+        $formOutput .= '    </div>
+        </div>';
 
-<?php } ?>
-        
-        
-        
-    <?php
-       
-
-};
+    }         
+ 
+    return $formOutput;
+}
 
 add_shortcode('aa_onepage_form', aa_onepage_contact_form);

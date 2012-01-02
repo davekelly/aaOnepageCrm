@@ -82,8 +82,8 @@ class AAOnepage_Api_Contact extends AAOnepage_Api{
         if( $formConfig['name']['show'] == '1' && $formConfig['name']['required'] == '1'){
             if( empty ($contactInfo['firstname']) ){
                 $errors['aaonepage_contact_fullname'] = $formConfig['name']['error']['required'];
-            }elseif( empty( $contactInfo['lastname'])){
-                $errors['aaonepage_contact_fullname'] = $formConfig['name']['error']['firstname'];
+            // }elseif( empty( $contactInfo['lastname'])){
+            //    $errors['aaonepage_contact_fullname'] = $formConfig['name']['error']['firstname'];
             }
         }
         

@@ -272,4 +272,4 @@ function aa_onepage_contact_form() {
     return $formOutput;
 }
 
-add_shortcode('aa_onepage_form', aa_onepage_contact_form);
+add_shortcode('aa_onepage_form', 'aa_onepage_contact_form');

@@ -15,12 +15,17 @@ You have the option of selecting a OnePageCRM tag you have set up to add to new 
 == Installation ==
 
 1. Upload the directory `aaOnepage` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Visit the plugin settings and sign into your onepage account
-1. use the shortcode [aa_onepage_form] in a WordPress Page or Post, or place `<?php echo aa_onepage_form(); ?>` in your template
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Visit the plugin settings and sign into your onepage account
+4. use the shortcode [aa_onepage_form] in a WordPress Page or Post, or place `<?php echo aa_onepage_form(); ?>` in your template
 
 
 == Changelog ==
+
+= 0.2 = 
+* Compatabiltiy fixes for  > Wordpress 3.3 (enqueue scripts action)
+* Typo fix in frontend form - quotes on action
+
 = 0.1.1 = 
 * Shortcode bug fix (no longer echoing result)
 

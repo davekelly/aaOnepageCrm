@@ -6,6 +6,10 @@
  */
 
 function aa_onepage_contact_form() {
+    $aa_show_error_message  = null;
+    $fullname               = null;
+    $aaContact              = null;
+    $formOutput             = null;
         
     $aaFormConfig = array(
         'name' => array(    

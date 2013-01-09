@@ -62,10 +62,10 @@ class AAOnepage_Api{
         }
 
         $defaults = array(
-            'sslverify'     => false,          // Getting SSL errors related to CA cert...this skips them
+            'sslverify'     => true,          
             'method'        => $method,
-            'timeout'       => 5,
-            'redirection'   => 5,
+            'timeout'       => 10,
+            'redirection'   => 10,
             'httpversion'   => '1.1',
             'blocking'      => true,
             'headers'       => array(),
@@ -100,9 +100,9 @@ class AAOnepage_Api{
             $url .= '?'. http_build_query( $args['body'], null, '&' );
             $args['body'] = null;
         }        
-               
+        
         $response = wp_remote_request($url, $args);
-                
+        
         if(! is_wp_error( $response ) ){
             
             if($this->apiFormat === '.json'){                
@@ -170,16 +170,18 @@ class AAOnepage_Api{
 
         $args['body'] = $authValues;                                    
 
-        $loginData = $this->doApiCall( $loginUrl, $args, 'GET', false);
+        $loginData = $this->doApiCall( $loginUrl, $args, 'POST', false);
 
         // Use the returned data
-        if($loginData->message === 'OK'){
+        if( is_wp_error( $loginData )){
+            return $loginData;
+        }elseif( $loginData->message === 'OK' ){
             set_transient( 'aa_onepage_account_details', $loginData);
             $this->setUid( $loginData->data->uid );
             $this->setApiKey( $loginData->data->key);
             $this->setPassword( null );
         }else{
-           return new WP_Error('broke', __( $loginData->message ));
+            return new WP_Error('broke', __( $loginData->message ));
         }        
 
         return null;

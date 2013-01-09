@@ -21,6 +21,10 @@ You have the option of selecting a OnePageCRM tag you have set up to add to new 
 
 
 == Changelog ==
+= 0.3 =
+* Fix for login after api update ( from GET to POST)
+* Minor updates to cleanup error messages when Debug mode is enabled,
+  mainly variable declaration
 
 = 0.2 = 
 * Compatabiltiy fixes for  > Wordpress 3.3 (enqueue scripts action)

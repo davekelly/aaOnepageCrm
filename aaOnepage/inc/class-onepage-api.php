@@ -1,26 +1,15 @@
 <?php
-
-
 class AAOnepage_Api{
     
     protected $apiVersion   = 'Version 1.2';
-    protected $apiUrl       = 'https://app.onepagecrm.com/api/'; 
+    protected $apiUrl       = 'https://app.onepagecrm.com/api/';
     protected $apiFormat    = '.json';
     protected $uid          = null;       // onepage userid
     protected $apiKey       = null;
-    protected $username;
-    protected $password;
-    
-    
-    public function __construct() {
-        
-        if(null === $this->uid || null === $this->apiKey){            
-           $this->getOnePageAccount();            
-        }
-    }
-    
-    
-    
+    protected $username     = null;
+    protected $password     = null;
+    protected $sslVerify    = false;
+
     public function getOnePageAccount(){
          // Have we account details already?
         $account_details = get_transient( 'aa_onepage_account_details' );           
@@ -48,10 +37,12 @@ class AAOnepage_Api{
         }else{
             // have a transient account details obj => grab the uid  & key              
             $this->setUid( $account_details->data->uid );
-            $this->setApiKey( $account_details->data->key );
+            $this->setApiKey( base64_decode($account_details->data->key));
             
             return $account_details; 
         }
+
+        return null; // Shouldn't get here
     }
     
     /**
@@ -65,36 +56,42 @@ class AAOnepage_Api{
      * @return Object 
      */
     public function doApiCall( $url, $args, $method = 'GET', $requireAuth = true){
-                
+        // Are we logged in?
+        if((null === $this->uid || null === $this->apiKey) && $requireAuth){
+            $this->getOnePageAccount();
+        }
+
         $defaults = array(
             'sslverify'     => false,          // Getting SSL errors related to CA cert...this skips them
             'method'        => $method,
             'timeout'       => 5,
             'redirection'   => 5,
-            'httpversion'   => '1.0',
+            'httpversion'   => '1.1',
             'blocking'      => true,
             'headers'       => array(),
             'body'          => null,
             'cookies'       => array()
         );        
         $args = wp_parse_args( $args , $defaults);
+
+        // Get hostname from URL
+        $url_data = array();
+        preg_match('/^http[s]?:\/\/([^\/]+)/', $this->apiUrl, $url_data);
+        $args['headers']['Host'] = $url_data[1];
         
         $url = $this->apiUrl . $url . $this->apiFormat;
                 
         // Auth not required for Login method only
         if($requireAuth){                                       
             
-            if(isset( $args['body'])){                
-                
+            if(isset( $args['body'])){
                 $auth = $this->calculateAuth( $url, $method, $args['body'] );
             }else{
                 $auth = $this->calculateAuth( $url, $method );
             }
                         
             // set onepage auth headers
-            foreach($auth as $key => $val){
-                $args['headers'][$key] = $val; 
-            }
+            $args['headers'] = array_merge($args['headers'], $auth);
         } 
         
         // DELETE also needs a querystring, but it's not being implemented here
@@ -118,6 +115,7 @@ class AAOnepage_Api{
              * @todo manage WP http error
              */
             print_r( $response );
+            return null;
         }
               
     }
@@ -147,17 +145,13 @@ class AAOnepage_Api{
             $httpBody   = http_build_query( $body, null, '&' );
             $shaBody    = hash('sha1', $httpBody );
             $authKey   .= '.' . $shaBody;
-        }            
+        }
 
-        $shaKey = hash_hmac('sha256', $authKey , $apiKey  );                        
-
-        $authHeaders = array(
+        return array(
             'X-OnePageCRM-UID'  => $uid,
             'X-OnePageCRM-TS'   => $timestamp,
-            'X-OnePageCRM-Auth' => $shaKey
+            'X-OnePageCRM-Auth' => hash_hmac('sha256', $authKey , $apiKey  )
         );
-
-        return $authHeaders;        
     }
     
     
@@ -187,7 +181,8 @@ class AAOnepage_Api{
         }else{
            return new WP_Error('broke', __( $loginData->message ));
         }        
-        
+
+        return null;
     }
     
     
@@ -212,8 +207,7 @@ class AAOnepage_Api{
      * @param String $key 
      */
     public function setApiKey( $key ){
-        // Key is returned from the api encoded...
-        $this->apiKey = base64_decode( $key );
+        $this->apiKey = $key;
     }
     
     public function getApiKey(){

@@ -4,7 +4,7 @@ Plugin Name: AA OnepageCRM Add-in
 Plugin URI: http://www.ambientage.com/blog/plugins/onepage/
 Description: Push leads to <a href="http://onepagecrm.com">OnepageCRM</a>.
 Author: Dave Kelly
-Version: 0.0.1
+Version: 0.2
 Author URI: http://www.ambientage.com/
  
 
@@ -29,15 +29,15 @@ http://www.gnu.org/copyleft/gpl.html
 
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
-	echo "Wha'sup. Not much happening here. Sorry ;)";
-	exit;
+    echo "Wha'sup. Not much happening here. Sorry ;)";
+    exit;
 }
 
-define( 'AA_ONEPAGE', '0.0.1' );
+define( 'AA_ONEPAGE', '0.2' );
 
 $pluginurl = plugin_dir_url(__FILE__);
 if ( preg_match( '/^https/', $pluginurl ) && !preg_match( '/^https/', get_bloginfo('url') ) )
-	$pluginurl = preg_replace( '/^https/', 'http', $pluginurl );
+    $pluginurl = preg_replace( '/^https/', 'http', $pluginurl );
 define( 'AA_ONEPAGE_FRONT_URL', $pluginurl );
 
 define( 'AA_ONEPAGE_URL', plugin_dir_url(__FILE__) );
@@ -54,15 +54,24 @@ if(is_admin()){
     require AA_ONEPAGE_PATH.'admin/class-onepage-admin.php';
     require AA_ONEPAGE_PATH.'admin/class-onepage-config.php';
 }else{
-    // frontend stuff
-    wp_enqueue_style('aa-onepage', AA_ONEPAGE_FRONT_URL . 'style/onepage.css');
-    wp_enqueue_script('jquery');
-    wp_enqueue_script('aa-onepage', AA_ONEPAGE_FRONT_URL . 'js/onepage.js');
-    
     require AA_ONEPAGE_PATH. 'frontend/aa-onepage-form.php';
 }
 
-if( null === $onePageApi){
+
+/**
+ * Enqueue front-end scripts / style
+ * @return [type] [description]
+ */
+function aa_plugin_enqueue_scripts(){
+    wp_enqueue_style('aa-onepage', AA_ONEPAGE_FRONT_URL . 'frontend/style/onepage.css');
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('aa-onepage', AA_ONEPAGE_FRONT_URL . 'frontend/js/onepage.js', array('jquery'), AA_ONEPAGE, true );
+}
+add_action('wp_enqueue_scripts', 'aa_plugin_enqueue_scripts');
+
+
+
+if( !isset( $onePageApi) ){
     $onePageApi = new AAOnepage_Api();
 }
 

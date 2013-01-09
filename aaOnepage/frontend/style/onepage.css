@@ -18,19 +18,19 @@
 #aa-onepage-contactform input:valid, textarea:valid {  }
 #aa-onepage-contactform input:invalid, #aa-onepage-contactform textarea:invalid { background-color: #f0dddd; }
 
-
-/* message styling */
-/* message styling */
-#aa-onepage-contactform .aa-success-message, #aa-onepage-contactform .aa-error-message, .aa-form-error{border: 1px solid; margin: 10px 0px; padding:15px 10px; text-align: center;}
-#aa-onepage-contactform .aa-success-message{ color: #4F8A10; background-color: #DFF2BF; }
-#aa-onepage-contactform .aa-error-message, .aa-form-error{ color: #D8000C; background-color: #FFBABA; }
-    div.aa-form-error{ margin: 5px 0px; padding:5px 10px; font-size: .9em;}
-        #aa-onepage-contactform .aa-success-message p, #aa-onepage-contactform .aa-error-message p{margin: 0 0 0 0 ; padding: 0 0 0 0;}
-
 /* form fields */
 #aa-onepage-contactform .aa-onepage-fieldgroup{margin-bottom: 5px;}
     #aa-onepage-contactform .aa-onepage-fieldgroup label{display: inline-block; width: 6em; font-size: .9em; zoom: 1; *display: inline;}
     .aa-onepage-submit{margin-left: 7em;}    
+
+/* message styling */
+#aa-onepage-contactform .aa-success-message, #aa-onepage-contactform .aa-error-message, .aa-form-error, .aa-error-message-form{border: 1px solid; margin: 10px 0px; padding:15px 10px; text-align: center;}
+#aa-onepage-contactform .aa-success-message{ color: #4F8A10; background-color: #DFF2BF; }
+#aa-onepage-contactform .aa-error-message, .aa-form-error, .aa-error-message-form{ color: #D8000C; background-color: #FFBABA; }
+    div.aa-form-error{ margin: 5px 0px; padding:5px 0; font-size: .9em;}
+        #aa-onepage-contactform .aa-success-message p, #aa-onepage-contactform .aa-error-message p{margin: 0 0 0 0 ; padding: 0 0 0 0;}
+    .aa-error-message-form{margin: 5px 0; padding: 3px 0; font-size: .8em; }
+    #aa-onepage-contactform label.error{border: 1px solid; margin: 10px 0px; padding:15px 10px; text-align: center; color: #D8000C; background-color: #FFBABA; display: block; width: auto;}
 
 
 /** Use basic styling */    

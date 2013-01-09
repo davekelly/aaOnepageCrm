@@ -21,19 +21,10 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
 			add_action( 'init', array(&$this, 'init') );
 		}
 		
-		function init() {
-                    // if ( $this->grant_access() ) {
+		function init() {                   
                         add_action( 'admin_init', array(&$this, 'options_init') );
-                        add_action( 'admin_menu', array(&$this, 'register_settings_page') );
-                        
+                        add_action( 'admin_menu', array(&$this, 'register_settings_page') );                        
                         add_filter( 'plugin_action_links', array(&$this, 'add_action_link'), 10, 2 );
-/*
-                    // }
-
-                    add_action( 'wp_dashboard_setup', array(&$this,'widget_setup'));	                    
-                    add_filter( 'wp_dashboard_widgets', array(&$this, 'widget_order'));                    
- * 
- */
 		}
 
 		function options_init() {

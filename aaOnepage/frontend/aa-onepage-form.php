@@ -140,7 +140,7 @@ function aa_onepage_contact_form() {
                 
                   // Custom heading set?
                   if(!empty( $aa_form_header )){
-                       $formOutput .= $aa_form_header; 
+                       $formOutput .= esc_html($aa_form_header); 
                   }else{
                       $formOutput .= 'Request a callback'; 
                   }

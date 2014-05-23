@@ -7,69 +7,69 @@
 
 
 if ( ! class_exists( 'AAOnepage_Admin' ) ) {
-	
-	class AAOnepage_Admin extends AAOnepage_Plugin_Admin {
+    
+    class AAOnepage_Admin extends AAOnepage_Plugin_Admin {
 
-		var $hook 		= 'aa-onepage';
-		var $filename		= 'aaOnepage/aaOnepage.php';
-		var $longname		= 'AA OnepageCRM Settings';
-		var $shortname		= 'AAOnep';
-		var $currentoption 	= 'aaonep';
-		var $ozhicon		= 'tag.png';        
-		
-		function AAOnepage_Admin() {
+        var $hook       = 'aa-onepage';
+        var $filename       = 'aaOnepage/aaOnepage.php';
+        var $longname       = 'AA OnepageCRM Settings';
+        var $shortname      = 'AAOnep';
+        var $currentoption  = 'aaonep';
+        var $ozhicon        = 'tag.png';        
+        
+        function AAOnepage_Admin() {
                     add_action( 'init', array(&$this, 'init') );
-		}
-		
-		function init() {                   
+        }
+        
+        function init() {                   
                         add_action( 'admin_init', array(&$this, 'options_init') );
                         add_action( 'admin_menu', array(&$this, 'register_settings_page') );                        
                         add_filter( 'plugin_action_links', array(&$this, 'add_action_link'), 10, 2 );
-		}
+        }
 
-		function options_init() {
-                    register_setting( 'aa_onepage_options', 'aa_onepage_username' );						
-                    register_setting( 'aa_onepage_options', 'aa_onepage_pwd' );	
+        function options_init() {
+                    register_setting( 'aa_onepage_options', 'aa_onepage_username' );                        
+                    register_setting( 'aa_onepage_options', 'aa_onepage_pwd' ); 
                     
                     // Frontend form setup
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_header' );						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_width' );						                                                            
-                    register_setting( 'aa_onepage_options', 'aa_onepage_basic_style' );						                                                            						                                        
-                    register_setting( 'aa_onepage_options', 'aa_onepage_success_message' );		
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_header' );                                                             
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_width' );                                                                                  
+                    register_setting( 'aa_onepage_options', 'aa_onepage_basic_style' );                                                                                                                                                 
+                    register_setting( 'aa_onepage_options', 'aa_onepage_success_message' );     
                     
                     // Tag to assign in OnePage
                     register_setting( 'aa_onepage_options', 'aa_onepage_contact_tags' );
                     
                     // Form fields to display & require                    
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_phone' );		
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_phone' );		                    
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_email' );		
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_email' );		                    
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_message' );		
-                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_message' );		                    
-		}
-						
-		/**
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_phone' );     
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_phone' );                          
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_email' );     
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_email' );                          
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_show_message' );       
+                    register_setting( 'aa_onepage_options', 'aa_onepage_form_require_message' );                            
+        }
+                        
+        /**
                  * Sidebar for the admin page. Not implemented yet.
                  */
-		function admin_sidebar() {
-		?>
-			<div class="postbox-container" style="width:20%;">
-				<div class="metabox-holder">	
-					<div class="meta-box-sortables">						
+        function admin_sidebar() {
+        ?>
+            <div class="postbox-container" style="width:20%;">
+                <div class="metabox-holder">    
+                    <div class="meta-box-sortables">                        
                                             Donate!! :)
-					</div>
-					<br/><br/><br/>
-				</div>
-			</div>
-		<?php
-		}		
-		
+                    </div>
+                    <br/><br/><br/>
+                </div>
+            </div>
+        <?php
+        }       
+        
 
                 /**
                  * @todo Break this page into tabs...
                  */
-		function aaonepage_settings_page() {           
+        function aaonepage_settings_page() {           
             $content = '';                   
             $onePageApi = null;                     
             $onePageApiContact = null;
@@ -141,7 +141,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Give the form a heading
                                 </th>          
                                 <td>
-                                    <input size="60" name="aa_onepage_form_header" type="text" value="<?php echo get_option('aa_onepage_form_header'); ?>" />
+                                    <input size="60" name="aa_onepage_form_header" type="text" value="<?php echo esc_html(get_option('aa_onepage_form_header')); ?>" />
                                 </td>
                             </tr>
                             
@@ -154,7 +154,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     </small>
                                 </th>          
                                 <td>
-                                    <input size="6" name="aa_onepage_form_width" type="text" value="<?php echo get_option('aa_onepage_form_width'); ?>" /> px
+                                    <input size="6" name="aa_onepage_form_width" type="text" value="<?php echo esc_html(get_option('aa_onepage_form_width')); ?>" /> px
                                 </td>
                             </tr>
                             
@@ -225,7 +225,8 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     </small>
                                 </th>
                                 <td>
-                                    <textarea name="aa_onepage_success_message" rows="3" cols="50"><?php echo get_option('aa_onepage_success_message'); ?></textarea>
+                                    <?php $success_message = wp_kses(get_option('aa_onepage_success_message'), array('p' => array('class' => array(), 'id' => array() ), 'strong' => array(), 'em' => array() ) ); ?>
+                                    <textarea name="aa_onepage_success_message" rows="3" cols="50"><?php echo $success_message; ?></textarea>
                                 </td>
                             </tr>
   <!-- Field settings -->                                                   
@@ -423,7 +424,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Onepage Username
                                 </th>
                                 <td>
-                                <input name="aa_onepage_username" type="text" value="<?php echo get_option( 'aa_onepage_username' ); ?>"/>
+                                <input name="aa_onepage_username" type="text" value="<?php echo esc_html(get_option( 'aa_onepage_username' )); ?>"/>
                             </td> 
                             </tr>
                             <tr valign="top">
@@ -431,7 +432,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Onepage Password
                                 </th>
                                 <td>
-                                    <input type="password" name="aa_onepage_pwd" value="<?php echo get_option( 'aa_onepage_pwd' ); ?>" />
+                                    <input type="password" name="aa_onepage_pwd" value="<?php echo esc_html(get_option( 'aa_onepage_pwd' )); ?>" />
                                 </td>
                             </tr>
                             
@@ -473,7 +474,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
             echo 'UID: ' . $api->getUid();
              * 
              */
-		}
+        }
                 
                 
                 public function textField(){
@@ -487,8 +488,8 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                 public function createDropdown(){
                     
                 }
-		
-	} // end class
         
-	$aaOnepage_admin = new AAOnepage_Admin();
+    } // end class
+        
+    $aaOnepage_admin = new AAOnepage_Admin();
 }

@@ -26,6 +26,10 @@ Push leads to your onepagecrm account through a contact form on your site
 
 == Changelog ==
 
+= 0.3.1 =
+* Login form bug fix
+* Config form bug fixes
+
 = 0.3 =
 * Fix for login after api update ( from GET to POST)
 * Minor updates to cleanup error messages when Debug mode is enabled,

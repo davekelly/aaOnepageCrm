@@ -141,7 +141,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Give the form a heading
                                 </th>          
                                 <td>
-                                    <input size="60" name="aa_onepage_form_header" type="text" value="<?php echo esc_html(get_option('aa_onepage_form_header')); ?>" />
+                                    <input size="60" name="aa_onepage_form_header" type="text" value="<?php echo esc_attr(get_option('aa_onepage_form_header')); ?>" />
                                 </td>
                             </tr>
                             
@@ -154,7 +154,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     </small>
                                 </th>          
                                 <td>
-                                    <input size="6" name="aa_onepage_form_width" type="text" value="<?php echo esc_html(get_option('aa_onepage_form_width')); ?>" /> px
+                                    <input size="6" name="aa_onepage_form_width" type="text" value="<?php echo esc_attr(get_option('aa_onepage_form_width')); ?>" /> px
                                 </td>
                             </tr>
                             
@@ -424,7 +424,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Onepage Username
                                 </th>
                                 <td>
-                                <input name="aa_onepage_username" type="text" value="<?php echo esc_html(get_option( 'aa_onepage_username' )); ?>"/>
+                                <input name="aa_onepage_username" type="text" value="<?php echo esc_attr(get_option( 'aa_onepage_username' )); ?>"/>
                             </td> 
                             </tr>
                             <tr valign="top">
@@ -432,7 +432,7 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                     Onepage Password
                                 </th>
                                 <td>
-                                    <input type="password" name="aa_onepage_pwd" value="<?php echo esc_html(get_option( 'aa_onepage_pwd' )); ?>" />
+                                    <input type="password" name="aa_onepage_pwd" value="<?php echo esc_attr(get_option( 'aa_onepage_pwd' )); ?>" />
                                 </td>
                             </tr>
                             

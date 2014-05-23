@@ -130,7 +130,7 @@ function aa_onepage_contact_form() {
             // Form Width
             $setFormWidth = '100%;';
             if(!empty($aaFormWidth)){
-                $setFormWidth = $aaFormWidth . 'px;';
+                $setFormWidth = esc_attr($aaFormWidth) . 'px;';
             }            
         
         $formOutput = '';
@@ -158,7 +158,7 @@ function aa_onepage_contact_form() {
             if( $aaFormConfig['name']['show'] == '1' ): 
                 $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_fullname">Name</label>
-                    <input type="text" id="aaonepage_contact_fullname" name="aaonepage_contact_fullname" value="' . $fullname .'"';
+                    <input type="text" id="aaonepage_contact_fullname" name="aaonepage_contact_fullname" value="' . esc_attr($fullname) .'"';
                      if( $aaFormConfig['name']['required'] == '1'){  
                          $formOutput .= 'class="required"';
                      } 
@@ -176,7 +176,7 @@ function aa_onepage_contact_form() {
             if( $aaFormConfig['company']['show'] == '1' ){
                 $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_company">Company </label>
-                    <input type="text" id="aaonepage_contact_company" name="aaonepage_contact_company" value="'. $aaContact['company'] .'"';
+                    <input type="text" id="aaonepage_contact_company" name="aaonepage_contact_company" value="'. esc_attr($aaContact['company']) .'"';
                         if( $aaFormConfig['company']['required'] == '1'){ 
                             $formOutput .= 'class="required"';                            
                         }
@@ -194,7 +194,7 @@ function aa_onepage_contact_form() {
             if( $aaFormConfig['phone']['show'] == '1' ): 
                 $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_phone">Phone</label>
-                    <input type="text" id="aaonepage_contact_phone" name="aaonepage_contact_phone" value="'. $aaContact['phones'] .'"';
+                    <input type="text" id="aaonepage_contact_phone" name="aaonepage_contact_phone" value="'. esc_attr($aaContact['phones']) .'"';
                         if( $aaFormConfig['phone']['required'] == '1'){ 
                             $formOutput .= 'class="required"';                             
                         } 
@@ -212,7 +212,7 @@ function aa_onepage_contact_form() {
             if( $aaFormConfig['email']['show'] == '1' ): 
                 $formOutput .= '<div class="aa-onepage-fieldgroup">
                     <label for="aaonepage_contact_email">Email</label>
-                    <input type="email" id="aaonepage_contact_email" name="aaonepage_contact_email" value="'. $aaContact['emails'] .'" class="email ';
+                    <input type="email" id="aaonepage_contact_email" name="aaonepage_contact_email" value="'. esc_attr($aaContact['emails']) .'" class="email ';
                     if( $aaFormConfig['email']['required'] == '1'){ 
                         $formOutput .= ' required ';
                     } 
@@ -234,7 +234,7 @@ function aa_onepage_contact_form() {
                    if( $aaFormConfig['message']['required'] == '1'){ 
                        $formOutput .= 'class="required"';
                    } 
-                   $formOutput .= '>' . $aaContact['description'] . '</textarea>';
+                   $formOutput .= '>' . esc_textarea($aaContact['description']) . '</textarea>';
                     
                    if(isset( $isValid['aaonepage_contact_description'] ) ): 
                         $formOutput .= '<div class="aa-error-message-form">' .

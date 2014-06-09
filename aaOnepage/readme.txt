@@ -3,7 +3,7 @@ Contributors: davkell
 Tags: crm, onepagecrm, ambient age
 Requires at least: 3.2.1
 Tested up to: 3.5
-Stable tag: 0.3
+Stable tag: 0.3.2
 
 Push leads to your onepagecrm.com account
 
@@ -25,6 +25,9 @@ Push leads to your onepagecrm account through a contact form on your site
 
 
 == Changelog ==
+
+= 0.3.2 =
+* Fix for onepage system tags not displaying in plugin options.
 
 = 0.3.1 =
 * Login form bug fix

@@ -22,6 +22,9 @@ You have the option of selecting a OnePageCRM tag you have set up to add to new 
 
 == Changelog ==
 
+= 0.3.2 =
+* Fix for onepage system tags not displaying in plugin options.
+
 = 0.3.1 =
 * Login form bug fix
 * Config form bug fixes

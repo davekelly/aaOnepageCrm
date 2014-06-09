@@ -190,17 +190,18 @@ if ( ! class_exists( 'AAOnepage_Admin' ) ) {
                                             $onePageApiContact = new AAOnepage_Api_Contact();
                                         }                                                                   
                                         $tags = $onePageApiContact->getCustomTags(); 
+                                        
                                         if($tags){ ?>
                                             <select name="aa_onepage_contact_tags">
                                                 <option value="">Choose a Tag</option>
                                             <?php
                                                 $chosenTag = get_option('aa_onepage_contact_tags');
-                                                foreach( $tags as $tag ){
+                                                foreach( $tags->names as $tag ){
                                                     $selected = '';
-                                                    if($tag->name === $chosenTag ){
+                                                    if($tag === $chosenTag ){
                                                         $selected = ' selected="selected" ';                                                                    
                                                     }
-                                                    echo '<option value="'. $tag->name .'" '. $selected . '>' . $tag->name . '</option>';
+                                                    echo '<option value="'. $tag .'" '. $selected . '>' . $tag . '</option>';
 
                                                 }
                                             ?>
